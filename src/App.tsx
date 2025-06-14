@@ -117,9 +117,11 @@ function App() {
             {!modelsLoading && !modelsError && models.map(model => (
               <option key={model.id} value={model.id}>
                 {model.name || model.id}
-                {model.pricing && model.pricing.prompt === 0 && model.pricing.completion === 0
-                  ? ' (Free)'
-                  : ' (Paid)'}
+                {model.pricing
+                  ? (model.pricing.prompt === 0 && model.pricing.completion === 0
+                      ? ' (Free)'
+                      : ' (Paid)')
+                  : ''}
               </option>
             ))}
           </select>
