@@ -182,6 +182,9 @@ function App() {
       clearAllConversations={clearAllConversations}
       collapsed={sidebarCollapsed}
       onToggleCollapse={() => setSidebarCollapsed((c) => !c)}
+      models={models}
+      selectedModel={selectedModel}
+      setSelectedModel={setSelectedModel}
       />
 
       {/* Main Content */}

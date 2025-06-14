@@ -1,6 +1,7 @@
 import React from 'react';
 import { MessageCircle, Plus, Trash2, Settings, ChevronRight, ChevronLeft } from 'lucide-react';
 import { ConversationType } from '../types';
+import { OpenRouterModel } from '../utils/api';
 
 interface ConversationSidebarProps {
   conversations: ConversationType[];
@@ -14,6 +15,9 @@ interface ConversationSidebarProps {
   clearAllConversations: () => void;
   collapsed: boolean;
   onToggleCollapse: () => void;
+  models: OpenRouterModel[];
+  selectedModel: string;
+  setSelectedModel: (id: string) => void;
 }
 
 export function ConversationSidebar({
@@ -177,17 +181,6 @@ export function ConversationSidebar({
                       <Trash2 className="w-4 h-4 text-red-400 hover:text-red-600" />
                     </button>
                   )}
-
-                  <ul>
-                    {conversations.map(conv => (
-                      <li key={conv.id} className="flex flex-col px-4 py-2">
-                        <span className="font-medium truncate">{conv.title}</span>
-                        <span className="text-xs text-gray-400">
-                          {conv.model}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
                 </li>
               ))}
             </ul>
