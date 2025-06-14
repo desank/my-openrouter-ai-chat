@@ -80,7 +80,51 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex flex-col">
+      {/* Header */}
+      <header className="bg-white/70 backdrop-blur-md border-b border-white/20 px-6 py-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="p-2 hover:bg-white/50 rounded-lg transition-colors lg:hidden"
+            >
+              <Menu className="w-5 h-5 text-gray-600" />
+            </button>
+            
+            {/* Brand Logo */}
+            <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+              <Sparkles className="w-6 h-6 text-white" />
+            </div>
+            {/* Brand Name */}
+            <div>
+              <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">Quantum Quest</h1>
+              <p className="text-sm text-gray-600">
+                {currentConversation ? currentConversation.title : 'Powered by DeepSeek R1'}
+              </p>
+            </div>
+          </div>
+          
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={handleNewConversation}
+              className="hidden sm:flex items-center space-x-2 px-3 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 text-sm"
+            >
+              <Plus className="w-4 h-4" />
+              <span>New</span>
+            </button>
+            
+            <button
+              onClick={() => setShowSettings(true)}
+              className="p-2 hover:bg-white/50 rounded-lg transition-colors"
+            >
+              <Settings className="w-5 h-5 text-gray-600" />
+            </button>
+          </div>
+        </div>
+      </header>
+
+    <div className="flex flex-1 min-h-0">
       {/* Sidebar */}
     <ConversationSidebar
       conversations={conversations}
@@ -98,48 +142,7 @@ function App() {
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
-        {/* Header */}
-        <header className="bg-white/70 backdrop-blur-md border-b border-white/20 px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <button
-                onClick={() => setSidebarOpen(true)}
-                className="p-2 hover:bg-white/50 rounded-lg transition-colors lg:hidden"
-              >
-                <Menu className="w-5 h-5 text-gray-600" />
-              </button>
-              
-              {/* Brand Logo */}
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-                <Sparkles className="w-6 h-6 text-white" />
-              </div>
-              {/* Brand Name */}
-              <div>
-                <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">Quantum Quest</h1>
-                <p className="text-sm text-gray-600">
-                  {currentConversation ? currentConversation.title : 'Powered by DeepSeek R1'}
-                </p>
-              </div>
-            </div>
-            
-            <div className="flex items-center space-x-2">
-              <button
-                onClick={handleNewConversation}
-                className="hidden sm:flex items-center space-x-2 px-3 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 text-sm"
-              >
-                <Plus className="w-4 h-4" />
-                <span>New</span>
-              </button>
-              
-              <button
-                onClick={() => setShowSettings(true)}
-                className="p-2 hover:bg-white/50 rounded-lg transition-colors"
-              >
-                <Settings className="w-5 h-5 text-gray-600" />
-              </button>
-            </div>
-          </div>
-        </header>
+        
 
         {/* Main Chat Area */}
         <main className="flex-1 px-6 py-6 pb-32 overflow-y-auto">
@@ -241,6 +244,9 @@ function App() {
           </form>
         </div>
       </div>
+    </div>
+
+      {/* Floating Action Button */}
 
       {/* Settings Modal */}
       {showSettings && (

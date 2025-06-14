@@ -48,13 +48,13 @@ export function ConversationSidebar({
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 lg:hidden"
+        className="inset-0 bg-black/20 backdrop-blur-sm z-40 lg:hidden"
         onClick={onClose}
       />
 
       {/* Sidebar */}
       <div
-        className={`fixed left-0 top-0 h-full z-50 flex flex-col transition-all duration-200
+        className={`h-full z-50 flex flex-col transition-all duration-200
           ${collapsed ? 'w-16' : 'w-80'}
           bg-white/90 backdrop-blur-md border-r border-white/20`}
       >
