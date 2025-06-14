@@ -107,6 +107,24 @@ export function ConversationSidebar({
             <Plus className="w-4 h-4" />
             {!collapsed && <span>New Conversation</span>}
           </button>
+          <div>
+            <label htmlFor="model-select" className="text-xs text-gray-700">Model:</label>
+            <select
+              id="model-select"
+              value={selectedModel}
+              onChange={e => setSelectedModel(e.target.value)}
+              className="w-full px-2 py-1 rounded border border-gray-300 text-xs mb-2"
+            >
+              {models.map(model => (
+                <option key={model.id} value={model.id}>
+                  {model.name || model.id}
+                  {model.pricing && model.pricing.prompt === 0 && model.pricing.completion === 0
+                    ? ' (Free)'
+                    : ' (Paid)'}
+                </option>
+              ))}
+            </select>
+          </div>
           <button
             onClick={clearAllConversations}
             className={`w-full flex items-center space-x-2 px-3 py-2 mt-2 rounded-lg transition-all duration-200 border border-red-200
@@ -159,6 +177,17 @@ export function ConversationSidebar({
                       <Trash2 className="w-4 h-4 text-red-400 hover:text-red-600" />
                     </button>
                   )}
+
+                  <ul>
+                    {conversations.map(conv => (
+                      <li key={conv.id} className="flex flex-col px-4 py-2">
+                        <span className="font-medium truncate">{conv.title}</span>
+                        <span className="text-xs text-gray-400">
+                          {conv.model}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
                 </li>
               ))}
             </ul>

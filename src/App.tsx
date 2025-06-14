@@ -21,6 +21,7 @@ function App() {
   } = useConversations();
 
   const currentConversation = getCurrentConversation();
+  const currentModel = currentConversation?.model || selectedModel;
   const currentMessages = currentConversation?.messages || [];
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
 
@@ -34,7 +35,7 @@ function App() {
   } = useChat({
     onMessageAdded: addMessageToConversation,
     currentMessages,
-  model: selectedModel,
+    model: currentModel,
   });
 
   const [input, setInput] = useState('');

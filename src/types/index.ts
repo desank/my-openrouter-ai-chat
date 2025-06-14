@@ -11,4 +11,5 @@ export interface ConversationType {
   messages: MessageType[];
   createdAt: Date;
   updatedAt: Date;
+  model: string;
 }

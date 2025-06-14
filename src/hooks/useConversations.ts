@@ -29,15 +29,16 @@ export function useConversations() {
     return conversations.find(c => c.id === currentConversationId) || null;
   }, [conversations, currentConversationId]);
 
-  const createNewConversation = useCallback((firstMessage?: string): string => {
+  const createNewConversation = useCallback((firstMessage?: string, model?: string): string => {
     const newConversation: ConversationType = {
       id: Date.now().toString(),
-      title: firstMessage ? 
+      title: firstMessage ?
         (firstMessage.length > 50 ? firstMessage.substring(0, 50) + '...' : firstMessage) :
         'New Conversation',
       messages: [],
       createdAt: new Date(),
       updatedAt: new Date(),
+      model: model || 'deepseek/deepseek-r1-0528',
     };
 
     const updatedConversations = [newConversation, ...conversations];
