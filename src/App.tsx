@@ -87,7 +87,7 @@ function App() {
         onNewConversation={handleNewConversation}
         onDeleteConversation={deleteConversation}
         onOpenSettings={() => setShowSettings(true)}
-        isOpen={sidebarOpen}
+  isOpen={sidebarOpen || window.innerWidth >= 1024} // Show on desktop
         onClose={() => setSidebarOpen(false)}
       />
 

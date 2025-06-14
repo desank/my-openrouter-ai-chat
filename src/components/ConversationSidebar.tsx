@@ -23,7 +23,7 @@ export function ConversationSidebar({
   isOpen,
   onClose,
 }: ConversationSidebarProps) {
-  if (!isOpen) return null;
+  if (!isOpen && window.innerWidth < 1024) return null;
 
   const formatDate = (date: Date) => {
     const now = new Date();
