@@ -20,6 +20,7 @@ function App() {
 
   const currentConversation = getCurrentConversation();
   const currentMessages = currentConversation?.messages || [];
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
 
   const {
     isLoading,
@@ -81,16 +82,18 @@ function App() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex">
       {/* Sidebar */}
-      <ConversationSidebar
-        conversations={conversations}
-        currentConversationId={currentConversationId}
-        onSelectConversation={handleSelectConversation}
-        onNewConversation={handleNewConversation}
-        onDeleteConversation={deleteConversation}
-        onOpenSettings={() => setShowSettings(true)}
-        isOpen={sidebarOpen || window.innerWidth >= 1024} // Show on desktop
-        onClose={() => setSidebarOpen(false)}
-        clearAllConversations={clearAllConversations}
+    <ConversationSidebar
+      conversations={conversations}
+      currentConversationId={currentConversationId}
+      onSelectConversation={handleSelectConversation}
+      onNewConversation={handleNewConversation}
+      onDeleteConversation={deleteConversation}
+      onOpenSettings={() => setShowSettings(true)}
+      isOpen={sidebarOpen || window.innerWidth >= 1024}
+      onClose={() => setSidebarOpen(false)}
+      clearAllConversations={clearAllConversations}
+      collapsed={sidebarCollapsed}
+      onToggleCollapse={() => setSidebarCollapsed((c) => !c)}
       />
 
       {/* Main Content */}

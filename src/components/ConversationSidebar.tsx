@@ -1,5 +1,5 @@
 import React from 'react';
-import { MessageCircle, Plus, Trash2, Settings } from 'lucide-react';
+import { MessageCircle, Plus, Trash2, Settings, ChevronRight, ChevronLeft } from 'lucide-react';
 import { ConversationType } from '../types';
 
 interface ConversationSidebarProps {
@@ -11,7 +11,9 @@ interface ConversationSidebarProps {
   onOpenSettings: () => void;
   isOpen: boolean;
   onClose: () => void;
-  clearAllConversations: () => void; // <-- Add this prop
+  clearAllConversations: () => void;
+  collapsed: boolean;
+  onToggleCollapse: () => void;
 }
 
 export function ConversationSidebar({
@@ -23,14 +25,16 @@ export function ConversationSidebar({
   onOpenSettings,
   isOpen,
   onClose,
-  clearAllConversations, // <-- Add this prop
+  clearAllConversations,
+  collapsed,
+  onToggleCollapse,
 }: ConversationSidebarProps) {
   if (!isOpen && window.innerWidth < 1024) return null;
 
   const formatDate = (date: Date) => {
     const now = new Date();
     const diffInHours = (now.getTime() - date.getTime()) / (1000 * 60 * 60);
-    
+
     if (diffInHours < 24) {
       return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     } else if (diffInHours < 24 * 7) {
@@ -43,44 +47,83 @@ export function ConversationSidebar({
   return (
     <>
       {/* Backdrop */}
-      <div 
+      <div
         className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 lg:hidden"
         onClick={onClose}
       />
-      
+
       {/* Sidebar */}
-      <div className="fixed left-0 top-0 h-full w-80 bg-white/90 backdrop-blur-md border-r border-white/20 z-50 flex flex-col">
+      <div
+        className={`fixed left-0 top-0 h-full z-50 flex flex-col transition-all duration-200
+          ${collapsed ? 'w-16' : 'w-80'}
+          bg-white/90 backdrop-blur-md border-r border-white/20`}
+      >
+        {/* Collapse/Expand Button */}
+        <button
+          onClick={onToggleCollapse}
+          className="absolute -right-4 top-6 z-50 bg-white border border-gray-200 rounded-full shadow p-1 hover:bg-gray-100 transition-colors"
+          style={{ width: 32, height: 32 }}
+        >
+          {collapsed ? (
+            <ChevronRight className="w-5 h-5 text-gray-600" />
+          ) : (
+            <ChevronLeft className="w-5 h-5 text-gray-600" />
+          )}
+        </button>
+
         {/* Header */}
-        <div className="p-4 border-b border-gray-200/50">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900">Conversations</h2>
-            <button
-              onClick={onOpenSettings}
-              className="p-2 hover:bg-gray-100/50 rounded-lg transition-colors"
-            >
-              <Settings className="w-4 h-4 text-gray-600" />
-            </button>
+        <div className={`p-4 border-b border-gray-200/50 ${collapsed ? 'flex flex-col items-center' : ''}`}>
+          <div className={`flex items-center justify-between mb-4 ${collapsed ? 'flex-col space-y-2' : ''}`}>
+            {!collapsed && (
+              <>
+                <h2 className="text-lg font-semibold text-gray-900">Conversations</h2>
+                <button
+                  onClick={onOpenSettings}
+                  className="p-2 hover:bg-gray-100/50 rounded-lg transition-colors"
+                >
+                  <Settings className="w-4 h-4 text-gray-600" />
+                </button>
+              </>
+            )}
+            {collapsed && (
+              <button
+                onClick={onOpenSettings}
+                className="p-2 hover:bg-gray-100/50 rounded-lg transition-colors"
+              >
+                <Settings className="w-5 h-5 text-gray-600" />
+              </button>
+            )}
           </div>
-          
+
           <button
             onClick={onNewConversation}
-            className="w-full flex items-center space-x-2 px-3 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200"
+            className={`w-full flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-200
+              ${collapsed
+                ? 'justify-center bg-gradient-to-r from-blue-600 to-purple-600 text-white'
+                : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700'
+              }`}
+            title="New Conversation"
           >
             <Plus className="w-4 h-4" />
-            <span>New Conversation</span>
+            {!collapsed && <span>New Conversation</span>}
           </button>
           <button
             onClick={clearAllConversations}
-            className="w-full flex items-center space-x-2 px-3 py-2 mt-2 bg-red-50 text-red-700 rounded-lg hover:bg-red-100 transition-all duration-200 border border-red-200"
+            className={`w-full flex items-center space-x-2 px-3 py-2 mt-2 rounded-lg transition-all duration-200 border border-red-200
+              ${collapsed
+                ? 'justify-center bg-red-50 text-red-700'
+                : 'bg-red-50 text-red-700 hover:bg-red-100'
+              }`}
+            title="Clear All"
           >
             <Trash2 className="w-4 h-4" />
-            <span>Clear All</span>
+            {!collapsed && <span>Clear All</span>}
           </button>
         </div>
         {/* Conversation List */}
-        <div className="flex-1 overflow-y-auto">
+        <div className={`flex-1 overflow-y-auto ${collapsed ? 'pt-4' : ''}`}>
           {conversations.length === 0 ? (
-            <div className="text-gray-400 text-center mt-8">No conversations yet.</div>
+            !collapsed && <div className="text-gray-400 text-center mt-8">No conversations yet.</div>
           ) : (
             <ul className="divide-y divide-gray-100">
               {conversations.map((conv) => (
@@ -92,23 +135,30 @@ export function ConversationSidebar({
                       : 'hover:bg-gray-50'
                   }`}
                   onClick={() => onSelectConversation(conv.id)}
+                  title={conv.title}
                 >
                   <div className="flex flex-col flex-1 min-w-0">
-                    <span className="truncate font-medium text-gray-900">{conv.title}</span>
-                    <span className="text-xs text-gray-500">
-                      {conv.messages.length} message{conv.messages.length !== 1 ? 's' : ''} • {formatDate(conv.updatedAt)}
+                    <span className={`truncate font-medium text-gray-900 ${collapsed ? 'text-xs' : ''}`}>
+                      {collapsed ? <MessageCircle className="w-5 h-5 text-blue-600" /> : conv.title}
                     </span>
+                    {!collapsed && (
+                      <span className="text-xs text-gray-500">
+                        {conv.messages.length} message{conv.messages.length !== 1 ? 's' : ''} • {formatDate(conv.updatedAt)}
+                      </span>
+                    )}
                   </div>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onDeleteConversation(conv.id);
-                    }}
-                    className="ml-2 p-1 rounded hover:bg-red-50"
-                    title="Delete conversation"
-                  >
-                    <Trash2 className="w-4 h-4 text-red-400 hover:text-red-600" />
-                  </button>
+                  {!collapsed && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onDeleteConversation(conv.id);
+                      }}
+                      className="ml-2 p-1 rounded hover:bg-red-50"
+                      title="Delete conversation"
+                    >
+                      <Trash2 className="w-4 h-4 text-red-400 hover:text-red-600" />
+                    </button>
+                  )}
                 </li>
               ))}
             </ul>
