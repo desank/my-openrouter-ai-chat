@@ -86,20 +86,7 @@ function App() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex flex-col">
       {/* Header */}
       <header className="bg-white/70 backdrop-blur-md border-b border-white/20 px-6 py-4">
-        <div className="flex items-center space-x-2">
-          <label htmlFor="model-select" className="text-sm text-gray-700">Model:</label>
-          <select
-            id="model-select"
-            value={selectedModel}
-            onChange={e => setSelectedModel(e.target.value)}
-            className="px-2 py-1 rounded border border-gray-300 text-sm"
-          >
-            <option value="deepseek/deepseek-r1-0528">DeepSeek R1</option>
-            <option value="openai/gpt-3.5-turbo">GPT-3.5 Turbo</option>
-            <option value="openai/gpt-4-turbo">GPT-4 Turbo</option>
-            {/* Add more OpenRouter models as desired */}
-          </select>
-        </div>
+        
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <button
