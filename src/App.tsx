@@ -6,6 +6,8 @@ import { Message } from './components/Message';
 import { SettingsModal } from './components/SettingsModal';
 import { ConversationSidebar } from './components/ConversationSidebar';
 
+const [selectedModel, setSelectedModel] = useState('deepseek/deepseek-r1-0528');
+
 function App() {
   const {
     conversations,
@@ -32,6 +34,7 @@ function App() {
   } = useChat({
     onMessageAdded: addMessageToConversation,
     currentMessages,
+  model: selectedModel,
   });
 
   const [input, setInput] = useState('');
@@ -83,6 +86,20 @@ function App() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex flex-col">
       {/* Header */}
       <header className="bg-white/70 backdrop-blur-md border-b border-white/20 px-6 py-4">
+        <div className="flex items-center space-x-2">
+          <label htmlFor="model-select" className="text-sm text-gray-700">Model:</label>
+          <select
+            id="model-select"
+            value={selectedModel}
+            onChange={e => setSelectedModel(e.target.value)}
+            className="px-2 py-1 rounded border border-gray-300 text-sm"
+          >
+            <option value="deepseek/deepseek-r1-0528">DeepSeek R1</option>
+            <option value="openai/gpt-3.5-turbo">GPT-3.5 Turbo</option>
+            <option value="openai/gpt-4-turbo">GPT-4 Turbo</option>
+            {/* Add more OpenRouter models as desired */}
+          </select>
+        </div>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <button
@@ -100,7 +117,7 @@ function App() {
             <div>
               <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">Quantum Quest</h1>
               <p className="text-sm text-gray-600">
-                {currentConversation ? currentConversation.title : 'Powered by DeepSeek R1'}
+                {currentConversation ? currentConversation.title : 'Powered by OpenRouter'}
               </p>
             </div>
           </div>
@@ -157,7 +174,7 @@ function App() {
                 </h2>
                 <p className="text-gray-600 mb-6">
                   {conversations.length === 0 
-                    ? 'Start your first conversation with DeepSeek R1. Ask me anything!'
+                    ? 'Start your first conversation with QuantumQuest. Ask me anything!'
                     : 'Continue your AI journey with a fresh conversation.'
                   }
                 </p>

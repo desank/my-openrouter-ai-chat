@@ -6,9 +6,10 @@ import { storage } from '../utils/storage';
 interface UseChatProps {
   onMessageAdded: (message: MessageType) => void;
   currentMessages: MessageType[];
+  model: string;
 }
 
-export function useChat({ onMessageAdded, currentMessages }: UseChatProps) {
+export function useChat({ onMessageAdded, currentMessages, model }: UseChatProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [apiKey, setApiKeyState] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
@@ -55,6 +56,7 @@ export function useChat({ onMessageAdded, currentMessages }: UseChatProps) {
     try {
       // Include conversation context for better responses
       const contextMessages = [...currentMessages, userMessage].slice(-10); // Last 10 messages for context
+      const response = await callOpenRouter(contextMessages, apiKey, model);
       const response = await callOpenRouter(contextMessages, apiKey);
       
       const assistantMessage: MessageType = {

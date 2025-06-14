@@ -1,6 +1,10 @@
 import { MessageType } from '../types';
 
-export async function callOpenRouter(messages: MessageType[], apiKey: string): Promise<string> {
+export async function callOpenRouter(
+  messages: MessageType[],
+  apiKey: string,
+  model: string // <-- add model parameter
+): Promise<string> {
   const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
     method: 'POST',
     headers: {
@@ -10,7 +14,7 @@ export async function callOpenRouter(messages: MessageType[], apiKey: string): P
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'deepseek/deepseek-r1-0528',
+      model, // <-- use model parameter
       messages: messages.map(msg => ({
         role: msg.role,
         content: msg.content,
