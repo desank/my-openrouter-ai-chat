@@ -6,9 +6,8 @@ import { Message } from './components/Message';
 import { SettingsModal } from './components/SettingsModal';
 import { ConversationSidebar } from './components/ConversationSidebar';
 
-const [selectedModel, setSelectedModel] = useState('deepseek/deepseek-r1-0528');
-
 function App() {
+  const [selectedModel, setSelectedModel] = useState('deepseek/deepseek-r1-0528');
   const {
     conversations,
     currentConversationId,
