@@ -5,6 +5,7 @@ import { useConversations } from './hooks/useConversations';
 import { Message } from './components/Message';
 import { SettingsModal } from './components/SettingsModal';
 import { ConversationSidebar } from './components/ConversationSidebar';
+import { fetchOpenRouterModels, OpenRouterModel } from './utils/api';
 
 function App() {
   const [selectedModel, setSelectedModel] = useState('deepseek/deepseek-r1-0528');
@@ -41,11 +42,25 @@ function App() {
   const [showApiKeyPrompt, setShowApiKeyPrompt] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  const [models, setModels] = useState<OpenRouterModel[]>([]);
+  const [modelsLoading, setModelsLoading] = useState(false);
+  const [modelsError, setModelsError] = useState<string | null>(null);
+
   useEffect(() => {
-    if (!apiKey) {
-      setShowApiKeyPrompt(true);
-    }
+    if (!apiKey) return;
+    setModelsLoading(true);
+    fetchOpenRouterModels(apiKey)
+      .then(setModels)
+      .catch((err) => setModelsError(err.message))
+      .finally(() => setModelsLoading(false));
   }, [apiKey]);
+
+  useEffect(() => {
+    if (models.length > 0) {
+      const preferred = models.find(m => m.id === 'deepseek/deepseek-r1-0528');
+      setSelectedModel(preferred ? preferred.id : models[0].id);
+    }
+  }, [models]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -92,12 +107,21 @@ function App() {
             value={selectedModel}
             onChange={e => setSelectedModel(e.target.value)}
             className="px-2 py-1 rounded border border-gray-300 text-sm disabled:bg-gray-100 disabled:text-gray-400"
-            disabled={currentMessages.length > 0} // <-- Disable if chat is not empty
+            disabled={currentMessages.length > 0 || modelsLoading || !!modelsError}
           >
-            <option value="deepseek/deepseek-r1-0528">DeepSeek R1</option>
-            <option value="openai/gpt-3.5-turbo">GPT-3.5 Turbo</option>
-            <option value="openai/gpt-4-turbo">GPT-4 Turbo</option>
-            {/* Add more OpenRouter models as desired */}
+            {modelsLoading && <option>Loading models...</option>}
+            {modelsError && <option>Error loading models</option>}
+            {!modelsLoading && !modelsError && models.length === 0 && (
+              <option>No models available</option>
+            )}
+            {!modelsLoading && !modelsError && models.map(model => (
+              <option key={model.id} value={model.id}>
+                {model.name || model.id}
+                {model.pricing && model.pricing.prompt === 0 && model.pricing.completion === 0
+                  ? ' (Free)'
+                  : ' (Paid)'}
+              </option>
+            ))}
           </select>
         </div>
         <div className="flex items-center justify-between">

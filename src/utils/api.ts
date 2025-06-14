@@ -40,3 +40,30 @@ export async function callOpenRouter(
 
   return data.choices[0].message.content;
 }
+
+export interface OpenRouterModel {
+  id: string;
+  name: string;
+  pricing: {
+    prompt: number | null;
+    completion: number | null;
+    currency: string;
+  } | null;
+  context_length: number;
+  description?: string;
+}
+
+export async function fetchOpenRouterModels(apiKey: string): Promise<OpenRouterModel[]> {
+  const response = await fetch('https://openrouter.ai/api/v1/models', {
+    headers: {
+      'Authorization': `Bearer ${apiKey}`,
+      'HTTP-Referer': window.location.origin,
+      'X-Title': 'Quantum Quest',
+    },
+  });
+  if (!response.ok) {
+    throw new Error('Failed to fetch models');
+  }
+  const data = await response.json();
+  return data.data as OpenRouterModel[];
+}
