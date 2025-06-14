@@ -68,7 +68,7 @@ export function useChat({ onMessageAdded, currentMessages, model }: UseChatProps
       onMessageAdded(assistantMessage);
     } catch (err) {
       console.error('Chat error:', err);
-      let errorMessage = 'Failed to send message. Please try again.';
+      let errorMessage = 'An error occurred: ' + err;
       
       if (err instanceof Error) {
         if (err.message.includes('401') || err.message.includes('unauthorized')) {
