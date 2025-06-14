@@ -77,7 +77,43 @@ export function ConversationSidebar({
             <span>Clear All</span>
           </button>
         </div>
-        {/* ...existing code... */}
+        {/* Conversation List */}
+        <div className="flex-1 overflow-y-auto">
+          {conversations.length === 0 ? (
+            <div className="text-gray-400 text-center mt-8">No conversations yet.</div>
+          ) : (
+            <ul className="divide-y divide-gray-100">
+              {conversations.map((conv) => (
+                <li
+                  key={conv.id}
+                  className={`flex items-center justify-between px-4 py-3 cursor-pointer transition-colors ${
+                    conv.id === currentConversationId
+                      ? 'bg-gradient-to-r from-blue-50 to-purple-50'
+                      : 'hover:bg-gray-50'
+                  }`}
+                  onClick={() => onSelectConversation(conv.id)}
+                >
+                  <div className="flex flex-col flex-1 min-w-0">
+                    <span className="truncate font-medium text-gray-900">{conv.title}</span>
+                    <span className="text-xs text-gray-500">
+                      {conv.messages.length} message{conv.messages.length !== 1 ? 's' : ''} • {formatDate(conv.updatedAt)}
+                    </span>
+                  </div>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onDeleteConversation(conv.id);
+                    }}
+                    className="ml-2 p-1 rounded hover:bg-red-50"
+                    title="Delete conversation"
+                  >
+                    <Trash2 className="w-4 h-4 text-red-400 hover:text-red-600" />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
     </>
   );
