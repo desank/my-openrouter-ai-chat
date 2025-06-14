@@ -161,7 +161,7 @@ function App() {
         
 
         {/* Main Chat Area */}
-        <main className="flex-1 px-6 py-6 pb-32 overflow-y-auto">
+        <main className="flex-1 px-6 py-6 overflow-y-auto">
           <div className="max-w-4xl mx-auto">
             {currentMessages.length === 0 ? (
               <div className="text-center py-12">
@@ -222,7 +222,7 @@ function App() {
         </main>
 
         {/* Input Area */}
-        <div className="bg-white/70 backdrop-blur-md border-t border-white/20 p-6">
+        <div className="bg-white/70 backdrop-blur-md border-t border-white/20 p-6 sticky bottom-0 z-20">
           <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
             <div className="flex space-x-4">
               <div className="flex-1 relative">
