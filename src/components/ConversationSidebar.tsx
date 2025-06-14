@@ -32,6 +32,9 @@ export function ConversationSidebar({
   clearAllConversations,
   collapsed,
   onToggleCollapse,
+  models,
+  selectedModel,
+  setSelectedModel,
 }: ConversationSidebarProps) {
   if (!isOpen && window.innerWidth < 1024) return null;
 
