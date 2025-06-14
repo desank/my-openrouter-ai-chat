@@ -63,6 +63,12 @@ function App() {
     }
   }, [models]);
 
+  useEffect(() => {
+    if (currentConversation && currentConversation.model) {
+      setSelectedModel(currentConversation.model);
+    }
+  }, [currentConversation]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
@@ -74,7 +80,7 @@ function App() {
 
     // Create new conversation if none exists
     if (!currentConversationId) {
-      createNewConversation(input.trim());
+      createNewConversation(input.trim(), selectedModel); 
     }
 
     const message = input.trim();
@@ -88,7 +94,7 @@ function App() {
   };
 
   const handleNewConversation = () => {
-    createNewConversation();
+    createNewConversation(undefined, selectedModel);
     setSidebarOpen(false);
   };
 
