@@ -57,7 +57,6 @@ export function useChat({ onMessageAdded, currentMessages, model }: UseChatProps
       // Include conversation context for better responses
       const contextMessages = [...currentMessages, userMessage].slice(-10); // Last 10 messages for context
       const response = await callOpenRouter(contextMessages, apiKey, model);
-      const response = await callOpenRouter(contextMessages, apiKey);
       
       const assistantMessage: MessageType = {
         id: (Date.now() + 1).toString(),
