@@ -82,7 +82,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex flex-col">
+    <div className="flex-1 flex flex-col min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex flex-col">
       {/* Header */}
       <header className="bg-white/70 backdrop-blur-md border-b border-white/20 px-6 py-4">
         <div className="flex items-center space-x-2">
