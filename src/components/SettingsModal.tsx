@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { X, Key, Eye, EyeOff, ExternalLink } from 'lucide-react';
+import { X, Key, ExternalLink } from 'lucide-react';
+import ApiKeyInput from './ApiKeyInput';
 
 interface SettingsModalProps {
   apiKey: string;
@@ -9,13 +10,16 @@ interface SettingsModalProps {
 }
 
 export function SettingsModal({ apiKey, onSave, onClose, isInitialSetup = false }: SettingsModalProps) {
-  const [inputValue, setInputValue] = useState(apiKey);
-  const [showKey, setShowKey] = useState(false);
+  const [localApiKey, setLocalApiKey] = useState(apiKey);
+
+  const handleApiKeyChange = (value: string) => {
+    setLocalApiKey(value);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (inputValue.trim()) {
-      onSave(inputValue.trim());
+    if (localApiKey.trim()) {
+      onSave(localApiKey.trim());
       if (!isInitialSetup) {
         onClose();
       }
@@ -25,24 +29,7 @@ export function SettingsModal({ apiKey, onSave, onClose, isInitialSetup = false 
   if (isInitialSetup) {
     return (
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="relative">
-          <input
-            type={showKey ? 'text' : 'password'}
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            placeholder="sk-or-..."
-            className="w-full px-4 py-3 bg-gray-50 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent pr-12"
-            required
-          />
-          <button
-            type="button"
-            onClick={() => setShowKey(!showKey)}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-          >
-            {showKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-          </button>
-        </div>
-        
+        <ApiKeyInput onApiKeyChange={handleApiKeyChange} />
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
           <p className="text-sm text-blue-800 mb-2">
             Don't have an API key?
@@ -57,7 +44,6 @@ export function SettingsModal({ apiKey, onSave, onClose, isInitialSetup = false 
             <ExternalLink className="w-3 h-3" />
           </a>
         </div>
-
         <button
           type="submit"
           className="w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-medium"
@@ -92,23 +78,7 @@ export function SettingsModal({ apiKey, onSave, onClose, isInitialSetup = false 
             <label className="block text-sm font-medium text-gray-700 mb-2">
               OpenRouter API Key
             </label>
-            <div className="relative">
-              <input
-                type={showKey ? 'text' : 'password'}
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                placeholder="sk-or-..."
-                className="w-full px-4 py-3 bg-gray-50 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent pr-12"
-                required
-              />
-              <button
-                type="button"
-                onClick={() => setShowKey(!showKey)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-              >
-                {showKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-              </button>
-            </div>
+            <ApiKeyInput onApiKeyChange={handleApiKeyChange} />
           </div>
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">

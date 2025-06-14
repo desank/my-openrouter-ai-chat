@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
 
-const API_KEY_STORAGE = 'myapp_api_key';
+interface ApiKeyInputProps {
+  onApiKeyChange: (apiKey: string) => void;
+  initialValue?: string;
+}
 
-export default function ApiKeyInput({ onApiKeyChange }) {
-  const [apiKey, setApiKey] = useState('');
+const STORAGE_KEY = 'quantum-quest-api-key';
+
+export default function ApiKeyInput({ onApiKeyChange, initialValue = '' }: ApiKeyInputProps) {
+  const [apiKey, setApiKey] = useState(initialValue);
 
   useEffect(() => {
-    const stored = localStorage.getItem(API_KEY_STORAGE);
+    const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
       setApiKey(stored);
       onApiKeyChange(stored);
@@ -16,7 +21,7 @@ export default function ApiKeyInput({ onApiKeyChange }) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setApiKey(value);
-    localStorage.setItem(API_KEY_STORAGE, value);
+    localStorage.setItem(STORAGE_KEY, value);
     onApiKeyChange(value);
   };
 
@@ -25,7 +30,9 @@ export default function ApiKeyInput({ onApiKeyChange }) {
       type="password"
       value={apiKey}
       onChange={handleChange}
-      placeholder="Enter API Key"
+      placeholder="sk-or-..."
+      className="w-full px-4 py-3 bg-gray-50 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent pr-12"
+      required
     />
   );
 }
