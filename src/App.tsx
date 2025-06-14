@@ -15,6 +15,7 @@ function App() {
     selectConversation,
     addMessageToConversation,
     deleteConversation,
+    clearAllConversations,
   } = useConversations();
 
   const currentConversation = getCurrentConversation();
@@ -87,8 +88,9 @@ function App() {
         onNewConversation={handleNewConversation}
         onDeleteConversation={deleteConversation}
         onOpenSettings={() => setShowSettings(true)}
-  isOpen={sidebarOpen || window.innerWidth >= 1024} // Show on desktop
+        isOpen={sidebarOpen || window.innerWidth >= 1024} // Show on desktop
         onClose={() => setSidebarOpen(false)}
+        clearAllConversations={clearAllConversations}
       />
 
       {/* Main Content */}
@@ -103,6 +105,18 @@ function App() {
               >
                 <Menu className="w-5 h-5 text-gray-600" />
               </button>
+              
+              {/* Brand Logo */}
+              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                <Sparkles className="w-6 h-6 text-white" />
+              </div>
+              {/* Brand Name */}
+              <div>
+                <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">Quantum Quest</h1>
+                <p className="text-sm text-gray-600">
+                  {currentConversation ? currentConversation.title : 'Powered by DeepSeek R1'}
+                </p>
+              </div>
               
               <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
                 <MessageCircle className="w-5 h-5 text-white" />
