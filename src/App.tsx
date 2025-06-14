@@ -91,7 +91,8 @@ function App() {
             id="model-select"
             value={selectedModel}
             onChange={e => setSelectedModel(e.target.value)}
-            className="px-2 py-1 rounded border border-gray-300 text-sm"
+            className="px-2 py-1 rounded border border-gray-300 text-sm disabled:bg-gray-100 disabled:text-gray-400"
+            disabled={currentMessages.length > 0} // <-- Disable if chat is not empty
           >
             <option value="deepseek/deepseek-r1-0528">DeepSeek R1</option>
             <option value="openai/gpt-3.5-turbo">GPT-3.5 Turbo</option>
