@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Settings, MessageCircle, Send, Loader2, Key, X, Menu, Plus } from 'lucide-react';
+import { Settings, MessageCircle, Send, Loader2, Key, X, Menu, Plus, Sparkles } from 'lucide-react';
 import { useChat } from './hooks/useChat';
 import { useConversations } from './hooks/useConversations';
 import { Message } from './components/Message';
