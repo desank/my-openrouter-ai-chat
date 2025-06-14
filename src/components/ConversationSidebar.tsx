@@ -121,6 +121,12 @@ export function ConversationSidebar({
               value={selectedModel}
               onChange={e => setSelectedModel(e.target.value)}
               className="w-full px-2 py-1 rounded border border-gray-300 text-xs mb-2"
+              disabled={
+                // Disable if a conversation is selected and has messages
+                !!conversations.find(
+                  (c) => c.id === currentConversationId && c.messages.length > 0
+                )
+              }
             >
               {models.map(model => (
                 <option key={model.id} value={model.id}>

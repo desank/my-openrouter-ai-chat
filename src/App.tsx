@@ -100,33 +100,7 @@ function App() {
   return (
     <div className="flex-1 flex flex-col min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex flex-col">
       {/* Header */}
-      <header className="bg-white/70 backdrop-blur-md border-b border-white/20 px-6 py-4">
-        <div className="flex items-center space-x-2">
-          <label htmlFor="model-select" className="text-sm text-gray-700">Model:</label>
-          <select
-            id="model-select"
-            value={selectedModel}
-            onChange={e => setSelectedModel(e.target.value)}
-            className="px-2 py-1 rounded border border-gray-300 text-sm disabled:bg-gray-100 disabled:text-gray-400"
-            disabled={currentMessages.length > 0 || modelsLoading || !!modelsError}
-          >
-            {modelsLoading && <option>Loading models...</option>}
-            {modelsError && <option>Error loading models</option>}
-            {!modelsLoading && !modelsError && models.length === 0 && (
-              <option>No models available</option>
-            )}
-            {!modelsLoading && !modelsError && models.map(model => (
-              <option key={model.id} value={model.id}>
-                {model.name || model.id}
-                {model.pricing
-                  ? (model.pricing.prompt === 0 && model.pricing.completion === 0
-                      ? ' (Free)'
-                      : ' (Paid)')
-                  : ''}
-              </option>
-            ))}
-          </select>
-        </div>
+      <header className="bg-white/70 backdrop-blur-md border-b border-white/20 px-6 py-4">        
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <button
