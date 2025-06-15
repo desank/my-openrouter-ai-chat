@@ -70,15 +70,10 @@ function App() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
-    
+
     if (!apiKey) {
       setShowSettings(true);
       return;
-    }
-
-    // Create new conversation if none exists
-    if (!currentConversationId) {
-      createNewConversation(input.trim(), selectedModel); 
     }
 
     const message = input.trim();
@@ -88,7 +83,6 @@ function App() {
     if (!currentConversationId) {
       const newId = createNewConversation(undefined, selectedModel);
       selectConversation(newId);
-      // Wait for state to update before sending the message
       setTimeout(() => {
         sendMessage(message);
       }, 0);
