@@ -57,11 +57,15 @@ function App() {
   }, [apiKey]);
 
   useEffect(() => {
-    if (models.length > 0) {
+    if (
+      models.length > 0 &&
+      (!currentConversation || !currentConversation.model) &&
+      !selectedModel
+    ) {
       const preferred = models.find(m => m.id === 'deepseek/deepseek-r1-0528');
       setSelectedModel(preferred ? preferred.id : models[0].id);
     }
-  }, [models]);
+  }, [models, currentConversation, selectedModel]);
 
   useEffect(() => {
   if (currentConversation && currentConversation.model && currentConversation.messages.length > 0) {
