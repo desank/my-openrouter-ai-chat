@@ -24,6 +24,7 @@ function App() {
   const currentModel = currentConversation?.model || selectedModel;
   const currentMessages = currentConversation?.messages || [];
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
+  const [pendingFirstMessage, setPendingFirstMessage] = useState<string | null>(null);
 
   const {
     isLoading,
@@ -67,42 +68,52 @@ function App() {
     }
   }, [models, currentConversation, selectedModel]);
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  if (!input.trim() || isLoading) return;
+  useEffect(() => {
+    if (
+      pendingFirstMessage &&
+      currentConversation &&
+      currentConversation.messages.length === 1 &&
+      currentConversation.messages[0].role === 'user' &&
+      currentConversation.messages[0].content === pendingFirstMessage
+    ) {
+      sendMessage(pendingFirstMessage);
+      setPendingFirstMessage(null);
+    }
+  }, [pendingFirstMessage, currentConversation]);
 
-  if (!apiKey) {
-    setShowSettings(true);
-    return;
-  }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!input.trim() || isLoading) return;
 
-  const message = input.trim();
-  setInput('');
+    if (!apiKey) {
+      setShowSettings(true);
+      return;
+    }
 
-  if (!currentConversationId) {
-    // 1. Create the conversation (empty)
-    const newId = createNewConversation(undefined, selectedModel);
-    // 2. Select it
-    selectConversation(newId);
+    const message = input.trim();
+    setInput('');
 
-    // 3. Add the first user message directly to the new conversation
-    addMessageToConversation({
-      id: Date.now().toString(),
-      role: 'user',
-      content: message,
-      timestamp: new Date(),
-    });
+    if (!currentConversationId) {
+      // 1. Create the conversation (empty)
+      const newId = createNewConversation(undefined, selectedModel);
+      // 2. Add the first user message directly to the new conversation
+      addMessageToConversation({
+        id: Date.now().toString(),
+        role: 'user',
+        content: message,
+        timestamp: new Date(),
+      });
+      // 3. Select the new conversation
+      selectConversation(newId);
 
-    // 4. Now send the message to the assistant, using the correct conversation context
-    setTimeout(() => {
-      sendMessage(message);
-    }, 0);
+      // 4. Use an effect to detect when the new conversation is selected and has the first message,
+      //    then trigger sendMessage(message) from that effect (see below).
+      setPendingFirstMessage(message); // <-- Add this state
+      return;
+    }
 
-    return;
-  }
-
-  await sendMessage(message);
-};
+    await sendMessage(message);
+  };
 
   const handleApiKeySubmit = (key: string) => {
     setApiKey(key);
