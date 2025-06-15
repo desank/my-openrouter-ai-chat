@@ -64,7 +64,7 @@ function App() {
   }, [models]);
 
   useEffect(() => {
-    if (currentConversation && currentConversation.model) {
+  if (currentConversation && currentConversation.model && currentConversation.messages.length > 0) {
       setSelectedModel(currentConversation.model);
     }
   }, [currentConversation]);
