@@ -92,7 +92,8 @@ function App() {
   };
 
   const handleNewConversation = () => {
-    createNewConversation(undefined, selectedModel);
+    // Just clear the current conversation selection, don't create a new one yet
+    selectConversation(null);
     setSidebarOpen(false);
   };
 
