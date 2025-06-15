@@ -57,7 +57,7 @@ function App() {
   }, [apiKey]);
 
   useEffect(() => {
-    if (
+    if (  
       models.length > 0 &&
       (!currentConversation || !currentConversation.model) &&
       !selectedModel
@@ -66,12 +66,6 @@ function App() {
       setSelectedModel(preferred ? preferred.id : models[0].id);
     }
   }, [models, currentConversation, selectedModel]);
-
-  useEffect(() => {
-  if (currentConversation && currentConversation.model && currentConversation.messages.length > 0) {
-      setSelectedModel(currentConversation.model);
-    }
-  }, [currentConversation]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
