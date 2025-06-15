@@ -67,30 +67,42 @@ function App() {
     }
   }, [models, currentConversation, selectedModel]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!input.trim() || isLoading) return;
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  if (!input.trim() || isLoading) return;
 
-    if (!apiKey) {
-      setShowSettings(true);
-      return;
-    }
+  if (!apiKey) {
+    setShowSettings(true);
+    return;
+  }
 
-    const message = input.trim();
-    setInput('');
+  const message = input.trim();
+  setInput('');
 
-    // If no conversation, create it and select it before sending the message
-    if (!currentConversationId) {
-      const newId = createNewConversation(undefined, selectedModel);
-      selectConversation(newId);
-      setTimeout(() => {
-        sendMessage(message);
-      }, 0);
-      return;
-    }
+  if (!currentConversationId) {
+    // 1. Create the conversation (empty)
+    const newId = createNewConversation(undefined, selectedModel);
+    // 2. Select it
+    selectConversation(newId);
 
-    await sendMessage(message);
-  };
+    // 3. Add the first user message directly to the new conversation
+    addMessageToConversation({
+      id: Date.now().toString(),
+      role: 'user',
+      content: message,
+      timestamp: new Date(),
+    });
+
+    // 4. Now send the message to the assistant, using the correct conversation context
+    setTimeout(() => {
+      sendMessage(message);
+    }, 0);
+
+    return;
+  }
+
+  await sendMessage(message);
+};
 
   const handleApiKeySubmit = (key: string) => {
     setApiKey(key);
