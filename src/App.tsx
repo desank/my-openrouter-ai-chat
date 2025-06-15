@@ -83,6 +83,18 @@ function App() {
 
     const message = input.trim();
     setInput('');
+
+    // If no conversation, create it and select it before sending the message
+    if (!currentConversationId) {
+      const newId = createNewConversation(undefined, selectedModel);
+      selectConversation(newId);
+      // Wait for state to update before sending the message
+      setTimeout(() => {
+        sendMessage(message);
+      }, 0);
+      return;
+    }
+
     await sendMessage(message);
   };
 
